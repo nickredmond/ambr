@@ -1,0 +1,43 @@
+<ActionBar class="action-bar top-giver-action-bar">
+    <Label class="action-bar-title" text="Home"></Label>
+</ActionBar>
+
+<GridLayout class="page page-content">
+    <!-- <ListView [items]="items" class="list-group">
+        <ng-template let-item="item">
+            <Label [nsRouterLink]="['../item', item.id]" [text]="item.name" class="list-group-item"></Label>
+        </ng-template>
+    </ListView> -->
+    <ListView class="home-leaderboard-list" [items]="leaderboards" separatorColor="transparent">
+        <ng-template let-leaderboard="item">
+            <StackLayout class="home-panel">
+                <Label class="leaderboard-title" [text]="leaderboard.title"></Label>
+                <Label class="leaderboard-subtitle" [text]="leaderboard.subtitle"></Label>
+                <ListView class="leaderboard-list" [items]="leaderboard.data" (itemTap)="onTopGiverTap($event)" separatorColor="transparent">
+                    <ng-template let-leader="item">
+                        <StackLayout>
+                            <GridLayout class="leaderboard-item" columns="*,*,*" backgroundColor="#005500" color="white" borderRadius="5">
+                                <Label col="0" colSpan="2" class="leader-name" [text]="leader[leaderboard.nameProperty]"></Label>
+                                <Label col="2" colSpan="1" class="leader-amount" 
+                                    [text]="leader[leaderboard.valueProperty]">
+                                </Label>
+                            </GridLayout>
+                        </StackLayout>
+                    </ng-template>
+                </ListView>
+                <StackLayout>
+					<Button text="See all" tap="onSeeAllPressed(leaderboard.name)"></Button>
+					<GridLayout columns="*,*,*,*,*">
+						<Label class="leaderboard-type-label" col="0" colSpan="1" text="Show:"></Label>
+						<SegmentedBar col="1" colSpan="4" class="leaderboard-type-picker" selectedIndex="0">
+							<SegmentedBarItem title="All"></SegmentedBarItem>
+							<SegmentedBarItem title="Peeps"></SegmentedBarItem>
+							<SegmentedBarItem title="Orgs"></SegmentedBarItem>
+						</SegmentedBar>
+					</GridLayout>
+				</StackLayout>
+                <Label class="leaderboard-divider"></Label>
+            </StackLayout>
+        </ng-template>
+    </ListView>
+</GridLayout>
