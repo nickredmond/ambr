@@ -21,7 +21,11 @@
             <StackLayout class="home-panel">
                 <Label class="leaderboard-title" [text]="leaderboard.title"></Label>
                 <Label class="leaderboard-subtitle" [text]="leaderboard.subtitle"></Label>
-                <ListView class="leaderboard-list" [items]="leaderboard.data" (itemTap)="onTopGiverTap($event)" separatorColor="transparent">
+                <ListView class="leaderboard-list" 
+                        [height]="60 * leaderboardData[leaderboard.data].length" 
+                        [items]="leaderboardData[leaderboard.data]" 
+                        (itemTap)="onTopGiverTap($event)" 
+                        separatorColor="transparent">
                     <ng-template let-leader="item">
                         <StackLayout>
                             <GridLayout class="leaderboard-item" columns="*,*,*,*,*,*,*,*,*,*" backgroundColor="#005500" color="white" borderRadius="5">

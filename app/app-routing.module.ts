@@ -2,21 +2,18 @@ import { NgModule } from "@angular/core";
 import { Routes } from "@angular/router";
 import { NativeScriptRouterModule } from "nativescript-angular/router";
 
-import { BrowseComponent } from "./browse/browse.component";
-import { HomeComponent } from "./home/home.component";
-import { ItemDetailComponent } from "./item-detail/item-detail.component";
+import { DonateComponent } from "./donate/donate.component";
+import { LeaderboardComponent } from "./leaderboard/leaderboard.component";
 import { SearchComponent } from "./search/search.component";
 
-export const COMPONENTS = [BrowseComponent, HomeComponent, ItemDetailComponent, SearchComponent];
+export const COMPONENTS = [DonateComponent, LeaderboardComponent, SearchComponent];
 
 const routes: Routes = [
-    { path: "", redirectTo: "/(homeTab:home//browseTab:browse//searchTab:search)", pathMatch: "full" },
+    { path: "", redirectTo: "/(leaderboardTab:leaderboard//donateTab:donate//searchTab:search)", pathMatch: "full" },
 
-    { path: "home", component: HomeComponent, outlet: "homeTab" },
-    { path: "browse", component: BrowseComponent, outlet: "browseTab" },
-    { path: "search", component: SearchComponent, outlet: "searchTab" },
-
-    { path: "item/:id", component: ItemDetailComponent, outlet: "homeTab" }
+    { path: "leaderboard", component: LeaderboardComponent, outlet: "leaderboardTab" },
+    { path: "donate", component: DonateComponent, outlet: "donateTab" },
+    { path: "search", component: SearchComponent, outlet: "searchTab" }
 ];
 
 @NgModule({

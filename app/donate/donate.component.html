@@ -1,0 +1,14 @@
+<ActionBar class="action-bar top-giver-action-bar">
+    <Label class="action-bar-title" text="Donate"></Label>
+</ActionBar>
+
+<StackLayout class="page page-content">
+    <TextField hint="Search by name, keyword, etc."></TextField>
+    <StackLayout>
+        <ListView [items]="charities">
+            <ng-template let-charity="item">
+                <Label [text]="charity.name"></Label>
+            </ng-template>
+        </ListView>
+    </StackLayout>
+</StackLayout>

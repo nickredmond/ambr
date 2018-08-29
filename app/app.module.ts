@@ -4,6 +4,8 @@ import { NativeScriptModule } from "nativescript-angular/nativescript.module";
 import { AppRoutingModule, COMPONENTS } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { CoreModule } from "./core/core.module";
+import { LeaderboardService } from "~/leaderboard/leaderboard.service";
+import { DonateService } from "~/donate/donate.service";
 
 @NgModule({
     bootstrap: [
@@ -13,6 +15,10 @@ import { CoreModule } from "./core/core.module";
         NativeScriptModule,
         AppRoutingModule,
         CoreModule
+    ],
+    providers: [
+        LeaderboardService,
+        DonateService
     ],
     declarations: [
         AppComponent,
