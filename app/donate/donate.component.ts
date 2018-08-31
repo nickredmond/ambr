@@ -2,10 +2,13 @@ import { Component, OnInit } from "@angular/core";
 import { DonateService } from "~/donate/donate.service";
 import { Charity } from "~/models/charity.model";
 
+import * as dialog from "ui/dialogs";
+
 @Component({
     selector: "Donate",
     moduleId: module.id,
-    templateUrl: "./donate.component.html"
+    templateUrl: "./donate.component.html",
+    styleUrls: ["./donate.component.scss"]
 })
 export class DonateComponent implements OnInit {
     public charities: Charity[];
@@ -15,7 +18,7 @@ export class DonateComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        // Use the "ngOnInit" handler to initialize data for the view.
+        this.initializeCharitiesList();
     }
 
     private initializeCharitiesList() {

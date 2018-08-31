@@ -1,14 +1,19 @@
 <ActionBar class="action-bar top-giver-action-bar">
-    <Label class="action-bar-title" text="Donate"></Label>
-</ActionBar>
-
-<StackLayout class="page page-content">
-    <TextField hint="Search by name, keyword, etc."></TextField>
-    <StackLayout>
-        <ListView [items]="charities">
-            <ng-template let-charity="item">
-                <Label [text]="charity.name"></Label>
-            </ng-template>
-        </ListView>
+        <Label class="action-bar-title" text="Donate"></Label>
+    </ActionBar>
+    
+    <StackLayout class="page page-content">
+        <TextField hint="Search by name, keyword, etc." id="charity-search"></TextField>
+        <StackLayout>
+            <ListView [items]="charities" height="100%">
+                <ng-template let-charity="item">
+                    <GridLayout columns="*,*,*,*,*,*">
+                        <Image [src]="charity.imageSource" row="0" rowSpan="2" col="0" colSpan="2" class="charity-img"></Image>
+                        <Label row="0" col="2" rowSpan="1" colSpan="4" [text]="charity.name" class="charity-name"></Label>
+                        <Label row="1" col="2" rowSpan="3" colSpan="4" [text]="charity.description" textWrap="true"
+                            class="charity-description"></Label>
+                    </GridLayout>
+                </ng-template>
+            </ListView>
+        </StackLayout>
     </StackLayout>
-</StackLayout>
