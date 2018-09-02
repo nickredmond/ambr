@@ -9,8 +9,10 @@ import { faBan, faCheck } from "@fortawesome/free-solid-svg-icons";
 
 import { ListPicker } from "ui/list-picker";
 import { SegmentedBar } from "ui/segmented-bar";
+import { TextField } from "ui/text-field";
 
 import * as dialogs from "ui/dialogs";
+import { LeaderType } from "~/models/leaderType.enum";
 
 @Component({
     selector: "Leaderboard",
@@ -19,6 +21,8 @@ import * as dialogs from "ui/dialogs";
     styleUrls: ["./leaderboard.component.scss"]
 })
 export class LeaderboardComponent implements OnInit {
+    @ViewChild("leaderboardQueryField") leaderboardQueryField: ElementRef; 
+
     public cancelIcon = faBan;
     public acceptIcon = faCheck;
 
@@ -26,6 +30,7 @@ export class LeaderboardComponent implements OnInit {
     public allTimeTopGiversByAmount: TopGiver[];
     public monthlyTopEarnersByPoints: TopEarner[];
     public isSelectingLeaderboard = false;
+    public isQueryingLeaders = false;
 
     public leaderboardOptions = [
         "Top Givers (this month)",
@@ -87,7 +92,9 @@ export class LeaderboardComponent implements OnInit {
     private currentLeaderboardRowNumber = 3;
     private currentLeaderboardRowSpan = 6;
     private lastLeaderboardSelectedIndex = 0;
-    private currentEntryTypesShown = [this.PEEP_ENTRY_TYPE, this.ORG_ENTRY_TYPE];
+    private leaderQueryColSpan = 5;
+    private currentLeaderTypeIndex = 0;
+    private currentQueryText = null;
 
     constructor(private leaderboardService: LeaderboardService, private router: RouterExtensions) { }
 
@@ -97,16 +104,12 @@ export class LeaderboardComponent implements OnInit {
 
     public getLeaderboardData(): any[] {
         const currentLeaderboardData = this.leaderboardData[this.currentLeaderboard.data];
-        const filteredLeaderboardData = currentLeaderboardData.filter((leader) => {
-            return this.currentEntryTypesShown.includes(leader.entryType);
-        });
-
-        return filteredLeaderboardData;
+        return currentLeaderboardData;
     }
     public onLeaderTypeFilter($event): void {
         const leaderTypeFilter = <SegmentedBar>$event.object;
-        const leaderTypeIndex = leaderTypeFilter.selectedIndex;
-        this.currentEntryTypesShown = this.LEADER_TYPE_FILTER_OPTIONS[leaderTypeIndex];
+        this.currentLeaderTypeIndex = leaderTypeFilter.selectedIndex;
+        this.queryCurrentLeaderboard(this.currentQueryText);
     }
 
     public onSelectLeaderboardTap(): void {
@@ -121,6 +124,7 @@ export class LeaderboardComponent implements OnInit {
     }
     public onLeaderboardSelectApprove(): void {
         this.currentLeaderboard = this.leaderboards[this.currentLeaderboardSelectedIndex];
+        this.queryCurrentLeaderboard(this.currentQueryText);
         this.resetSelectionView();
     }
     public selectedLeaderboardIndexChanged($event): void {
@@ -143,6 +147,30 @@ export class LeaderboardComponent implements OnInit {
         return this.ENTRY_TYPE_ICON_CODES[entryType];
     }
 
+    public onQueryLeaders($event): void {
+        this.isQueryingLeaders = true;
+        this.leaderQueryColSpan = 4;
+
+        const queryField = <TextField>$event.object;
+        const query = queryField.text;
+        this.currentQueryText = query;
+        this.queryCurrentLeaderboard(query);
+    }
+
+    public getLeaderQueryColSpan(): number {
+        return this.leaderQueryColSpan;
+    }
+
+    public onLeaderQueryCancelTap(): void {
+        this.queryCurrentLeaderboard(null);
+
+        const queryField: TextField = this.leaderboardQueryField.nativeElement;
+        queryField.text = "";
+
+        this.isQueryingLeaders = false;
+        this.leaderQueryColSpan = 5;
+    }
+
     // onSeeAllPressed(leaderboardName): void {
 
     // }
@@ -154,6 +182,38 @@ export class LeaderboardComponent implements OnInit {
     //     return iconPrefix + icon;
     // }
 
+    private getCurrentLeaderType(): LeaderType {
+        return <LeaderType>this.currentLeaderTypeIndex;
+    }
+
+    private queryCurrentLeaderboard(query: string): void {
+        const currentLeaderType = this.getCurrentLeaderType();
+
+        switch (this.currentLeaderboard.data) {
+            case "monthlyTopGiversByAmount": 
+                this.leaderboardService.getMonthlyTopGiversByAmount(query, currentLeaderType, 0, 10).subscribe(
+                    (response: TopGiver[]) => {
+                        this.leaderboardData["monthlyTopGiversByAmount"] = response;
+                    }
+                );
+                break;
+            case "allTimeTopGiversByAmount":
+                this.leaderboardService.getAllTimeTopGiversByAmount(query, 0, 10).subscribe(
+                    (response: TopGiver[]) => {
+                        this.leaderboardData["allTimeTopGiversByAmount"] = response;
+                    }
+                );
+                break;
+            case "monthlyTopEarnersByPoints":
+                this.leaderboardService.getMonthlyTopEarnersByAmount(query, 0, 10).subscribe(
+                    (response: TopEarner[]) => {
+                        this.leaderboardData["monthlyTopEarnersByPoints"] = response;
+                    }
+                );
+                break;
+        }
+    }
+
     private resetSelectionView(): void {
         this.isSelectingLeaderboard = false;
         this.currentLeaderboardRowNumber = 3;
@@ -161,7 +221,7 @@ export class LeaderboardComponent implements OnInit {
     }
 
     private intializeLeaderboards(): void {
-        this.leaderboardService.getMonthlyTopGiversByAmount(null, 0, 10).subscribe(
+        this.leaderboardService.getMonthlyTopGiversByAmount(null, LeaderType.All, 0, 10).subscribe(
             (response: TopGiver[]) => {
                 this.leaderboardData["monthlyTopGiversByAmount"] = response;
             },

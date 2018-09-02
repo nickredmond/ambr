@@ -2,6 +2,8 @@ import { Injectable } from "@angular/core";
 import { TopGiver } from "~/models/topGiver.model";
 import { Observable, of } from "rxjs";
 import { TopEarner } from "~/models/topEarner.model";
+import { LeaderType } from "~/models/leaderType.enum";
+import { Giver } from "~/models/giver.model";
 
 @Injectable()
 export class LeaderboardService {
@@ -77,29 +79,50 @@ export class LeaderboardService {
         });
     }
 
-    getMonthlyTopGiversByAmount(query: string, skip: number, take: number): Observable<TopGiver[]> {
+    getMonthlyTopGiversByAmount(query: string, leaderType: LeaderType, skip: number, take: number): Observable<TopGiver[]> {
+        query = query ? query.toLowerCase() : null;
         let testResult = (query === null) ? this.testGiversThisMonth : this.testGiversThisMonth.filter((giver) => {
-            return giver.name.includes(query);
+            return giver.name.toLowerCase().includes(query);
         });
+        testResult = this.filterLeaderType(testResult, leaderType);
         testResult = this.testSkipTake(testResult, skip, take);
         return of(testResult);
     }
 
     getAllTimeTopGiversByAmount(query: string, skip: number, take: number): Observable<TopGiver[]> {
+        query = query ? query.toLowerCase() : null;
         let testResult = (query === null) ? this.testGiversAllTime : this.testGiversAllTime.filter((giver) => {
-            return giver.name.includes(query);
+            return giver.name.toLowerCase().includes(query);
         });
         testResult = this.testSkipTake(testResult, skip, take);
         return of(testResult);
     }
 
     getMonthlyTopEarnersByAmount(query: string, skip: number, take: number): Observable<TopEarner[]> {
+        query = query ? query.toLowerCase() : null;
         let testResult = (query === null) ? this.testEarnersThisMonth : this.testEarnersThisMonth.filter((giver) => {
-            return giver.name.includes(query);
+            return giver.name.toLowerCase().includes(query);
         });
         testResult = this.testSkipTake(testResult, skip, take);
         return of(testResult);
     }
+
+    private filterLeaderType(items: any[], leaderType: LeaderType): any[] {
+        let result = items;
+
+        if (leaderType === LeaderType.Peep) {
+            result = items.filter((item) => {
+                return item.entryType === "peep";
+            });
+        }
+        else if (leaderType === LeaderType.Org) {
+            result = items.filter((item) => {
+                return item.entryType === "org";
+            });
+        }
+
+        return result;
+    };
 
     private testSkipTake(items: any[], skip: number, take: number): any[] {
         let result = [];
