@@ -1,10 +1,13 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
 import { RouterExtensions } from "nativescript-angular/router";
 import { DataService, IDataItem } from "../core/data.service";
 import { isAndroid } from "platform";
 import { TopGiver } from "~/models/topGiver.model";
 import { TopEarner } from "~/models/topEarner.model";
 import { LeaderboardService } from "~/leaderboard/leaderboard.service";
+import { faBan, faCheck } from "@fortawesome/free-solid-svg-icons";
+
+import { ListPicker } from "ui/list-picker";
 
 import * as dialogs from "ui/dialogs";
 
@@ -15,10 +18,19 @@ import * as dialogs from "ui/dialogs";
     styleUrls: ["./leaderboard.component.scss"]
 })
 export class LeaderboardComponent implements OnInit {
+    public cancelIcon = faBan;
+    public acceptIcon = faCheck;
+
     public monthlyTopGiversByAmount: TopGiver[];
     public allTimeTopGiversByAmount: TopGiver[];
     public monthlyTopEarnersByPoints: TopEarner[];
+    public isSelectingLeaderboard = false;
 
+    public leaderboardOptions = [
+        "Top Givers (this month)",
+        "Top Givers (all time)",
+        "Top Earners (this month)"
+    ];
     public leaderboardData = {
         "monthlyTopGiversByAmount": [],
         "allTimeTopGiversByAmount": [],
@@ -49,6 +61,8 @@ export class LeaderboardComponent implements OnInit {
             "data": "monthlyTopEarnersByPoints" //this.monthlyTopEarnersByPoints
         }
     ];
+    public currentLeaderboard = this.leaderboards[0];
+    public currentLeaderboardSelectedIndex = 0;
 
     public leaderboardEntryTypeOptions = [
         "All",
@@ -60,6 +74,11 @@ export class LeaderboardComponent implements OnInit {
         "peep": "house", //"avatar", <== just to show it works
         "org": "house"
     };
+    //private LEADERBOARD_SELECTION_TIMEOUT_MILLISECONDS = 1000;
+    //private currentLeaderboardSelectionTimeout;
+    private currentLeaderboardRowNumber = 3;
+    private currentLeaderboardRowSpan = 6;
+    private lastLeaderboardSelectedIndex = 0;
 
     constructor(private leaderboardService: LeaderboardService, private router: RouterExtensions) { }
 
@@ -67,15 +86,51 @@ export class LeaderboardComponent implements OnInit {
         this.intializeLeaderboards();
     }
 
-    onSeeAllPressed(leaderboardName): void {
-
+    public onSelectLeaderboardTap(): void {
+        this.isSelectingLeaderboard = true;
+        this.currentLeaderboardRowNumber = 6;
+        this.currentLeaderboardRowSpan = 3;
+        this.lastLeaderboardSelectedIndex = this.currentLeaderboardSelectedIndex;
     }
+    public onLeaderboardSelectCancel(): void {
+        this.currentLeaderboardSelectedIndex = this.lastLeaderboardSelectedIndex;
+        this.resetSelectionView();
+    }
+    public onLeaderboardSelectApprove(): void {
+        this.currentLeaderboard = this.leaderboards[this.currentLeaderboardSelectedIndex];
+        this.resetSelectionView();
+    }
+    public selectedLeaderboardIndexChanged($event): void {
+        //clearTimeout(this.currentLeaderboardSelectionTimeout);
+        
+        const leaderboardSelect = <ListPicker>$event.object;
+        this.currentLeaderboardSelectedIndex = leaderboardSelect.selectedIndex;
+       // this.currentLeaderboardSelectionTimeout = setTimeout(() => {
+        //}, this.LEADERBOARD_SELECTION_TIMEOUT_MILLISECONDS);
+    }
+    
+    public getLeaderboardRowNumber(): number {
+        return this.currentLeaderboardRowNumber;
+    }
+    public getLeaderboardRowSpan(): number {
+        return this.currentLeaderboardRowSpan;
+    }
+
+    // onSeeAllPressed(leaderboardName): void {
+
+    // }
 
     getIconSource(entryType: string): string {
         const iconPrefix = isAndroid ? "res://" : "res://tabIcons/";
         const icon = this.ENTRY_TYPE_ICON_MAPPINGS[entryType];
 
         return iconPrefix + icon;
+    }
+
+    private resetSelectionView(): void {
+        this.isSelectingLeaderboard = false;
+        this.currentLeaderboardRowNumber = 3;
+        this.currentLeaderboardRowSpan = 6;
     }
 
     private intializeLeaderboards(): void {
