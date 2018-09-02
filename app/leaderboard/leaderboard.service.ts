@@ -81,7 +81,7 @@ export class LeaderboardService {
 
     getMonthlyTopGiversByAmount(query: string, leaderType: LeaderType, skip: number, take: number): Observable<TopGiver[]> {
         query = query ? query.toLowerCase() : null;
-        let testResult = (query === null) ? this.testGiversThisMonth : this.testGiversThisMonth.filter((giver) => {
+        let testResult = !query ? this.testGiversThisMonth : this.testGiversThisMonth.filter((giver) => {
             return giver.name.toLowerCase().includes(query);
         });
         testResult = this.filterLeaderType(testResult, leaderType);
@@ -89,20 +89,22 @@ export class LeaderboardService {
         return of(testResult);
     }
 
-    getAllTimeTopGiversByAmount(query: string, skip: number, take: number): Observable<TopGiver[]> {
+    getAllTimeTopGiversByAmount(query: string, leaderType: LeaderType, skip: number, take: number): Observable<TopGiver[]> {
         query = query ? query.toLowerCase() : null;
-        let testResult = (query === null) ? this.testGiversAllTime : this.testGiversAllTime.filter((giver) => {
+        let testResult = !query ? this.testGiversAllTime : this.testGiversAllTime.filter((giver) => {
             return giver.name.toLowerCase().includes(query);
         });
+        testResult = this.filterLeaderType(testResult, leaderType);
         testResult = this.testSkipTake(testResult, skip, take);
         return of(testResult);
     }
 
-    getMonthlyTopEarnersByAmount(query: string, skip: number, take: number): Observable<TopEarner[]> {
+    getMonthlyTopEarnersByAmount(query: string, leaderType: LeaderType, skip: number, take: number): Observable<TopEarner[]> {
         query = query ? query.toLowerCase() : null;
-        let testResult = (query === null) ? this.testEarnersThisMonth : this.testEarnersThisMonth.filter((giver) => {
+        let testResult = !query ? this.testEarnersThisMonth : this.testEarnersThisMonth.filter((giver) => {
             return giver.name.toLowerCase().includes(query);
         });
+        testResult = this.filterLeaderType(testResult, leaderType);
         testResult = this.testSkipTake(testResult, skip, take);
         return of(testResult);
     }

@@ -162,6 +162,7 @@ export class LeaderboardComponent implements OnInit {
     }
 
     public onLeaderQueryCancelTap(): void {
+        this.currentQueryText = null;
         this.queryCurrentLeaderboard(null);
 
         const queryField: TextField = this.leaderboardQueryField.nativeElement;
@@ -198,14 +199,14 @@ export class LeaderboardComponent implements OnInit {
                 );
                 break;
             case "allTimeTopGiversByAmount":
-                this.leaderboardService.getAllTimeTopGiversByAmount(query, 0, 10).subscribe(
+                this.leaderboardService.getAllTimeTopGiversByAmount(query, currentLeaderType, 0, 10).subscribe(
                     (response: TopGiver[]) => {
                         this.leaderboardData["allTimeTopGiversByAmount"] = response;
                     }
                 );
                 break;
             case "monthlyTopEarnersByPoints":
-                this.leaderboardService.getMonthlyTopEarnersByAmount(query, 0, 10).subscribe(
+                this.leaderboardService.getMonthlyTopEarnersByAmount(query, currentLeaderType, 0, 10).subscribe(
                     (response: TopEarner[]) => {
                         this.leaderboardData["monthlyTopEarnersByPoints"] = response;
                     }
@@ -230,7 +231,7 @@ export class LeaderboardComponent implements OnInit {
             }
         );
 
-        this.leaderboardService.getAllTimeTopGiversByAmount(null, 0, 10).subscribe(
+        this.leaderboardService.getAllTimeTopGiversByAmount(null, LeaderType.All, 0, 10).subscribe(
             (response: TopGiver[]) => {
                 this.leaderboardData["allTimeTopGiversByAmount"] = response;
             },
@@ -239,7 +240,7 @@ export class LeaderboardComponent implements OnInit {
             }
         );
 
-        this.leaderboardService.getMonthlyTopEarnersByAmount(null, 0, 10).subscribe(
+        this.leaderboardService.getMonthlyTopEarnersByAmount(null, LeaderType.All, 0, 10).subscribe(
             (response: TopEarner[]) => {
                 this.leaderboardData["monthlyTopEarnersByPoints"] = response;
             },
