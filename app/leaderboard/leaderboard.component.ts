@@ -8,6 +8,7 @@ import { LeaderboardService } from "~/leaderboard/leaderboard.service";
 import { faBan, faCheck } from "@fortawesome/free-solid-svg-icons";
 
 import { ListPicker } from "ui/list-picker";
+import { SegmentedBar } from "ui/segmented-bar";
 
 import * as dialogs from "ui/dialogs";
 
@@ -70,20 +71,42 @@ export class LeaderboardComponent implements OnInit {
         "Organizations"
     ];
 
-    private ENTRY_TYPE_ICON_MAPPINGS = {
-        "peep": "house", //"avatar", <== just to show it works
-        "org": "house"
+    private PEEP_ENTRY_TYPE = "peep";
+    private ORG_ENTRY_TYPE = "org";
+    private ENTRY_TYPE_ICON_CODES = {
+        "peep": "\uf007",
+        "org": "\uf1ad"
+    };
+    private LEADER_TYPE_FILTER_OPTIONS = {
+        0: [this.PEEP_ENTRY_TYPE, this.ORG_ENTRY_TYPE],
+        1: [this.PEEP_ENTRY_TYPE],
+        2: [this.ORG_ENTRY_TYPE]
     };
     //private LEADERBOARD_SELECTION_TIMEOUT_MILLISECONDS = 1000;
     //private currentLeaderboardSelectionTimeout;
     private currentLeaderboardRowNumber = 3;
     private currentLeaderboardRowSpan = 6;
     private lastLeaderboardSelectedIndex = 0;
+    private currentEntryTypesShown = [this.PEEP_ENTRY_TYPE, this.ORG_ENTRY_TYPE];
 
     constructor(private leaderboardService: LeaderboardService, private router: RouterExtensions) { }
 
     ngOnInit(): void {
         this.intializeLeaderboards();
+    }
+
+    public getLeaderboardData(): any[] {
+        const currentLeaderboardData = this.leaderboardData[this.currentLeaderboard.data];
+        const filteredLeaderboardData = currentLeaderboardData.filter((leader) => {
+            return this.currentEntryTypesShown.includes(leader.entryType);
+        });
+
+        return filteredLeaderboardData;
+    }
+    public onLeaderTypeFilter($event): void {
+        const leaderTypeFilter = <SegmentedBar>$event.object;
+        const leaderTypeIndex = leaderTypeFilter.selectedIndex;
+        this.currentEntryTypesShown = this.LEADER_TYPE_FILTER_OPTIONS[leaderTypeIndex];
     }
 
     public onSelectLeaderboardTap(): void {
@@ -116,16 +139,20 @@ export class LeaderboardComponent implements OnInit {
         return this.currentLeaderboardRowSpan;
     }
 
+    public getIconCodeByLeaderType(entryType): string {
+        return this.ENTRY_TYPE_ICON_CODES[entryType];
+    }
+
     // onSeeAllPressed(leaderboardName): void {
 
     // }
 
-    getIconSource(entryType: string): string {
-        const iconPrefix = isAndroid ? "res://" : "res://tabIcons/";
-        const icon = this.ENTRY_TYPE_ICON_MAPPINGS[entryType];
+    // getIconSource(entryType: string): string {
+    //     const iconPrefix = isAndroid ? "res://" : "res://tabIcons/";
+    //     const icon = this.ENTRY_TYPE_ICON_MAPPINGS[entryType];
 
-        return iconPrefix + icon;
-    }
+    //     return iconPrefix + icon;
+    // }
 
     private resetSelectionView(): void {
         this.isSelectingLeaderboard = false;
@@ -134,7 +161,7 @@ export class LeaderboardComponent implements OnInit {
     }
 
     private intializeLeaderboards(): void {
-        this.leaderboardService.getMonthlyTopGiversByAmount().subscribe(
+        this.leaderboardService.getMonthlyTopGiversByAmount(null, 0, 10).subscribe(
             (response: TopGiver[]) => {
                 this.leaderboardData["monthlyTopGiversByAmount"] = response;
             },
@@ -143,7 +170,7 @@ export class LeaderboardComponent implements OnInit {
             }
         );
 
-        this.leaderboardService.getAllTimeTopGiversByAmount().subscribe(
+        this.leaderboardService.getAllTimeTopGiversByAmount(null, 0, 10).subscribe(
             (response: TopGiver[]) => {
                 this.leaderboardData["allTimeTopGiversByAmount"] = response;
             },
@@ -152,7 +179,7 @@ export class LeaderboardComponent implements OnInit {
             }
         );
 
-        this.leaderboardService.getMonthlyTopEarnersByAmount().subscribe(
+        this.leaderboardService.getMonthlyTopEarnersByAmount(null, 0, 10).subscribe(
             (response: TopEarner[]) => {
                 this.leaderboardData["monthlyTopEarnersByPoints"] = response;
             },

@@ -10,7 +10,7 @@
     </ListView> -->
     <GridLayout row="0" rowSpan="1" columns="*,*,*,*,*">
         <Label class="leaderboard-type-label" col="0" colSpan="1" text="Show:"></Label>
-        <SegmentedBar col="1" colSpan="4" class="leaderboard-type-picker" selectedIndex="0">
+        <SegmentedBar col="1" colSpan="4" class="leaderboard-type-picker" selectedIndex="0" (selectedIndexChanged)="onLeaderTypeFilter($event)">
             <SegmentedBarItem title="All"></SegmentedBarItem>
             <SegmentedBarItem title="Peeps"></SegmentedBarItem>
             <SegmentedBarItem title="Orgs"></SegmentedBarItem>
@@ -24,37 +24,29 @@
         </StackLayout>
         <Button *ngIf="!isSelectingLeaderboard" class="leaderboard-select-button" row="0" rowSpan="1" col="1" colSpan="1" text="Select Leaderboard" (tap)="onSelectLeaderboardTap()"></Button>
         <GridLayout *ngIf="isSelectingLeaderboard" row="0" rowSpan="1" col="1" colSpan="1" rows="*" columns="*,*">
-            <Button class="leaderboard-select-button icon-button" row="0" rowSpan="1" col="0" colSpan="1" text="&#xf05e;" (tap)="onLeaderboardSelectCancel()"></Button>
-            <Button class="leaderboard-select-button icon-button" row="0" rowSpan="1" col="1" colSpan="1" text="&#xf00c;" (tap)="onLeaderboardSelectApprove()"></Button>
+            <Button class="leaderboard-select-button icon-button ambr-btn-cancel" row="0" rowSpan="1" col="0" colSpan="1" text="&#xf05e;" (tap)="onLeaderboardSelectCancel()"></Button>
+            <Button class="leaderboard-select-button icon-button ambr-btn-approve" row="0" rowSpan="1" col="1" colSpan="1" text="&#xf00c;" (tap)="onLeaderboardSelectApprove()"></Button>
         </GridLayout>
     </GridLayout>
     <ListPicker *ngIf="isSelectingLeaderboard" row="3" rowSpan="3" [items]="leaderboardOptions" [selectedIndex]="currentLeaderboardSelectedIndex" (selectedIndexChange)="selectedLeaderboardIndexChanged($event)"></ListPicker>
-    
-    <!-- <ListView row="1" rowSpan="8" class="home-leaderboard-list" [items]="leaderboards" separatorColor="transparent">
-        <ng-template let-leaderboard="item"> -->
-            <StackLayout #leaderboardStack [row]="getLeaderboardRowNumber()" [rowSpan]="getLeaderboardRowSpan()" class="home-panel">
-                <ListView class="leaderboard-list" 
-                        [height]="65 * leaderboardData[currentLeaderboard.data].length" 
-                        [items]="leaderboardData[currentLeaderboard.data]" 
-                        (itemTap)="onTopGiverTap($event)" 
-                        separatorColor="transparent">
-                    <ng-template let-leader="item">
-                        <StackLayout>
-                            <GridLayout class="leaderboard-item" columns="*,*,*,*,*,*,*,*,*,*" backgroundColor="#005500" color="white" borderRadius="5">
-                                <Image col="0" colSpan="1" [src]="getIconSource(leader.entryType)" strech="none"></Image>
-                                <Label col="1" colSpan="5" class="leader-name leader-property" [text]="leader[currentLeaderboard.nameProperty]"></Label>
-                                <Label col="6" colSpan="4" class="leader-amount leader-property" 
-                                    [text]="leader[currentLeaderboard.valueProperty]">
-                                </Label>
-                            </GridLayout>
-                        </StackLayout>
-                    </ng-template>
-                </ListView>
-                <!-- <StackLayout>
-					<Button text="See all" tap="onSeeAllPressed(currentLeaderboard.name)"></Button>
-				</StackLayout> -->
-                <Label class="leaderboard-divider"></Label>
-            </StackLayout>
-        <!-- </ng-template>
-    </ListView> -->
+    <StackLayout [row]="getLeaderboardRowNumber()" [rowSpan]="getLeaderboardRowSpan()" class="home-panel">
+        <ListView class="leaderboard-list" 
+                [height]="65 * leaderboardData[currentLeaderboard.data].length" 
+                [items]="getLeaderboardData()" 
+                (itemTap)="onTopGiverTap($event)">
+            <ng-template let-leader="item">
+                <StackLayout>
+                    <GridLayout class="leaderboard-item" columns="*,*,*,*,*,*,*,*,*,*">
+                        <Label class="giver-icon" [text]="getIconCodeByLeaderType(leader.entryType)"></Label>
+                        <!-- <Image col="0" colSpan="1" [src]="getIconSource(leader.entryType)" strech="none"></Image> -->
+                        <Label col="1" colSpan="5" class="leader-name leader-property" [text]="leader[currentLeaderboard.nameProperty]"></Label>
+                        <Label col="6" colSpan="4" class="leader-amount leader-property" 
+                            [text]="leader[currentLeaderboard.valueProperty]">
+                        </Label>
+                    </GridLayout>
+                </StackLayout>
+            </ng-template>
+        </ListView>
+        <Label class="leaderboard-divider"></Label>
+    </StackLayout>
 </GridLayout>
