@@ -7,6 +7,7 @@
       <Label class="h2 title" [text]="charity.name"></Label>
       <Image id="charity-detail-image" [src]="charity.imageSource"></Image>
       <!-- <StackLayout style="width: 90%"> -->
+          <WebView src="~/html/stripe-card-details.html"></WebView>
           <Label id="charity-detail-description" [text]="charity.description" textWrap="true"></Label>
           <StackLayout id="charity-detail-buttons-container">
               <Button text="View Website" (tap)="onViewWebsiteTap()"></Button>
