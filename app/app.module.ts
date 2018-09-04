@@ -6,6 +6,8 @@ import { AppComponent } from "./app.component";
 import { CoreModule } from "./core/core.module";
 import { LeaderboardService } from "~/leaderboard/leaderboard.service";
 import { DonateService } from "~/donate/donate.service";
+import { HttpClientModule } from "@angular/common/http";
+import { NavigationData } from "~/models/navigation.data";
 
 @NgModule({
     bootstrap: [
@@ -14,11 +16,13 @@ import { DonateService } from "~/donate/donate.service";
     imports: [
         NativeScriptModule,
         AppRoutingModule,
-        CoreModule
+        CoreModule,
+        HttpClientModule
     ],
     providers: [
         LeaderboardService,
-        DonateService
+        DonateService,
+        NavigationData
     ],
     declarations: [
         AppComponent,

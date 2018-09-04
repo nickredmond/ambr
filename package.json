@@ -29,6 +29,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.3.1",
     "nativescript-angular": "~6.1.0",
     "nativescript-drop-down": "^4.0.1",
+    "nativescript-stripe": "^4.0.0",
     "nativescript-theme-core": "~1.0.4",
     "reflect-metadata": "~0.1.10",
     "rxjs": "~6.2.0",

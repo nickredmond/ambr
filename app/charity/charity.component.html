@@ -1,0 +1,32 @@
+<ActionBar class="action-bar top-giver-action-bar">
+  <NavigationButton text="Go Back" android.systemIcon="ic_menu_back" (tap)="onNavigatingBack()"></NavigationButton>
+  <Label class="action-bar-title" text="Details"></Label>
+</ActionBar>
+<ScrollView id="charity-detail-container">
+  <StackLayout>
+      <Label class="h2 title" [text]="charity.name"></Label>
+      <Image id="charity-detail-image" [src]="charity.imageSource"></Image>
+      <!-- <StackLayout style="width: 90%"> -->
+          <Label id="charity-detail-description" [text]="charity.description" textWrap="true"></Label>
+          <StackLayout id="charity-detail-buttons-container">
+              <Button text="View Website" (tap)="onViewWebsiteTap()"></Button>
+              <Button text="Make One-time Donation"></Button>
+              <Button text="Set Up Recurring Donation"></Button>
+          </StackLayout>
+          <!-- <GridLayout id="charity-detail-counters-container" rows="*,*" columns="*,*">
+              <Label class="charity-detail-counter-label" col="0" colSpan="1" row="0" rowSpan="1" text="Money raised via ambr:"></Label>
+              <Label class="charity-detail-counter-value" col="1" colSpan="1" row="0" rowSpan="1" text="$0.00"></Label>
+              <Label class="charity-detail-counter-label" col="0" colSpan="1" row="1" rowSpan="1" text="Number of ambr donors:"></Label>
+              <Label class="charity-detail-counter-value" col="1" colSpan="1" row="1" rowSpan="1" text="0"></Label>
+          </GridLayout> -->
+          <StackLayout class="charity-detail-counters-container" orientation="horizontal">
+              <Label class="charity-detail-counter-label" text="Money raised via ambr:"></Label>
+              <Label class="charity-detail-counter-value" [text]="getTotalDonationAmount()"></Label>
+          </StackLayout>
+          <StackLayout class="charity-detail-counters-container" orientation="horizontal">
+              <Label class="charity-detail-counter-label" text="Number of ambr donors:"></Label>
+              <Label class="charity-detail-counter-value" [text]="getTotalNumberOfDonors()"></Label>
+          </StackLayout>
+      <!-- </StackLayout> -->
+  </StackLayout>
+</ScrollView>

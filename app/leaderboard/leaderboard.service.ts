@@ -127,7 +127,7 @@ export class LeaderboardService {
     };
 
     private testSkipTake(items: any[], skip: number, take: number): any[] {
-        let result = [];
+        let result = items;
         if (items.length > skip) {
             const finalTake = items.length > skip + take ? take : items.length - skip;
             result = items.slice(skip, skip + finalTake);

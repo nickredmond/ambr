@@ -17,7 +17,7 @@
         </SegmentedBar>
     </GridLayout>
     <GridLayout row="1" rowSpan="1" rows="*" columns="*,*,*,*,*">
-            <TextField #leaderboardQueryField col="0" [colSpan]="getLeaderQueryColSpan()" hint="Search donors by name" id="leaderboard-search" (returnPress)="onQueryLeaders($event)"></TextField>
+            <TextField #leaderboardQueryField col="0" [colSpan]="leaderQueryColSpan" hint="Search donors by name" id="leaderboard-search" (returnPress)="onQueryLeaders($event)"></TextField>
             <Button *ngIf="isQueryingLeaders" col="4" colSpan="1" class="leaderboard-select-button icon-button ambr-btn-cancel" text="&#xf05e;" (tap)="onLeaderQueryCancelTap()"></Button>
     </GridLayout>
     <GridLayout row="2" rowSpan="1" rows="*" columns="*,*">

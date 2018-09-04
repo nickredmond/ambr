@@ -1,30 +1,32 @@
 import { Injectable } from "@angular/core";
 import { Observable, of } from "rxjs";
 import { Charity } from "~/models/charity.model";
+import { HttpClient } from "@angular/common/http";
 
 @Injectable()
 export class DonateService {
+    constructor(private httpClient: HttpClient) {}
+
     queryCharities(query: string, skip: number, take: number): Observable<Charity[]> {
-        return of([]);
+        return this.requestCharities(query, skip, take);
     }
 
     getTopCharities(skip: number, take: number): Observable<Charity[]> {
-        return of([
-            {
-                "name": "ASPCA",
-                "imageSource": "https://yt3.ggpht.com/a-/ACSszfEfeCYUch7EDA1EthYdxHUKsoF_nqFhHm8nKA=s900-mo-c-c0xffffffff-rj-k-no",
-                "description": "Learn more about the ASPCA's work to rescue animals from abuse, pass humane laws and share resources with shelters nationwide. Join our fight today!"
-            },
-            {
-                "name": "Save the Children",
-                "imageSource": "https://yt3.ggpht.com/a-/ACSszfFgLdwqtuClzRmqwidtgaTJPsMomFny3hVkZA=s900-mo-c-c0xffffffff-rj-k-no",
-                "description": "Join Save the Children to give girls and boys in the United States and around the world a healthy start, an education, and protection from harm."
-            },
-            {
-                "name": "UNICEF",
-                "imageSource": "https://ceowatermandate.org/wp-content/uploads/2017/08/UNICEF-logo.jpg",
-                "description": "UNICEF works in 190 countries and territories to save children’s lives, to defend their rights, and to help them fulfil their potential, from early childhood through adolescence. And we never give up."
-            }
-        ]);
+        return this.requestCharities(null, skip, take);
+    }
+
+    private requestCharities(queryText: string, skip: number, take: number): Observable<Charity[]> {
+        const options = {
+            // DO NOT COMMIT API-KEY
+            headers: { "x-api-key": "1qpEd4yMkU1J7IOvb4qSb8lwCn7lUEA51cfMUhG4" }
+        };
+        const requestBody = {
+            text: queryText,
+            skip,
+            take
+        };
+        // ALSO DON'T COMMIT URL
+        const charitiesQueryUrl = "https://494emnupx8.execute-api.us-east-1.amazonaws.com/beta/ambr-mongo-queryCharities";
+        return <Observable<Charity[]>>this.httpClient.post(charitiesQueryUrl, requestBody, options);
     }
 }

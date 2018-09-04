@@ -69,6 +69,7 @@ export class LeaderboardComponent implements OnInit {
     ];
     public currentLeaderboard = this.leaderboards[0];
     public currentLeaderboardSelectedIndex = 0;
+    public leaderQueryColSpan = 5;
 
     public leaderboardEntryTypeOptions = [
         "All",
@@ -92,7 +93,6 @@ export class LeaderboardComponent implements OnInit {
     private currentLeaderboardRowNumber = 3;
     private currentLeaderboardRowSpan = 6;
     private lastLeaderboardSelectedIndex = 0;
-    private leaderQueryColSpan = 5;
     private currentLeaderTypeIndex = 0;
     private currentQueryText = null;
 
@@ -155,10 +155,6 @@ export class LeaderboardComponent implements OnInit {
         const query = queryField.text;
         this.currentQueryText = query;
         this.queryCurrentLeaderboard(query);
-    }
-
-    public getLeaderQueryColSpan(): number {
-        return this.leaderQueryColSpan;
     }
 
     public onLeaderQueryCancelTap(): void {
