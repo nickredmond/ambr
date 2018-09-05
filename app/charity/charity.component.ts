@@ -5,6 +5,7 @@ import { RouterExtensions } from 'nativescript-angular/router';
 
 import * as utilities from "utils/utils";
 import * as dialog from "ui/dialogs";
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   moduleId: module.id,
@@ -15,7 +16,7 @@ import * as dialog from "ui/dialogs";
 export class CharityComponent implements OnInit {
   public charity: Charity;
 
-  constructor(private navigationData: NavigationData, private router: RouterExtensions) {
+  constructor(private navigationData: NavigationData, private router: RouterExtensions, private route: ActivatedRoute) {
     this.charity = navigationData.selectedCharity; 
   }
 
@@ -36,5 +37,9 @@ export class CharityComponent implements OnInit {
 
   public onViewWebsiteTap(): void {
     utilities.openUrl(this.charity.website);
+  }
+
+  public onOneTimeDonationTap(): void {
+    this.router.navigate(["../payment"], { relativeTo: this.route });
   }
 }

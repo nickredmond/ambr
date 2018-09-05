@@ -1,0 +1,7 @@
+
+<ActionBar class="action-bar top-giver-action-bar">
+    <NavigationButton text="Go Back" android.systemIcon="ic_menu_back" (tap)="onNavigatingBack()"></NavigationButton>
+    <Label class="action-bar-title" text="Payment"></Label>
+  </ActionBar>
+<WebView *ngIf="isPaymentInfoLoaded" [src]="paymentScreenUrl"></WebView>
+<ActivityIndicator [busy]="!isPaymentInfoLoaded" width="100" height="100"></ActivityIndicator>

@@ -5,22 +5,58 @@
 // 4. get token back, parse token ID, and then send it to server for payment onPaymentSubmit
 // BACKEND ADDITIONS: user lambda to get charge token (need to design user stuff), lambda to charge card using Stripe server code
 
-var getCurrentUserId = function() {
+var URL_PARAMETERS = {};
+var isAddingNewCard = false;
+
+var loadUrlParams = function() {
     var currentUrl = window.location.href;
     var queryString = currentUrl.split("?")[1];
     var allParameters = queryString.split("&");
-    var currentUserIdParameter = allParameters.find((param) => {
-        return param.startsWith("currentUserId=");
-    });
     
-    var currentUserId = currentUserIdParameter.split("=")[1];
-    return currentUserId;
+    allParameters.forEach((parameter) => {
+        var parameterTokens = parameter.split("=");
+        URL_PARAMETERS[parameterTokens[0]] = parameterTokens[1];
+    })
 };
+
+var getCurrentUserId = function() {
+    return URL_PARAMETERS["currentUserId"];
+};
+var getPaymentMethods = function() {
+    var paymentMethodsString = decodeURI(URL_PARAMETERS["paymentMethods"]);
+    return JSON.parse(paymentMethodsString);
+}
+
+var populatePaymentMethods = function(paymentMethods) {
+    var paymentSourceSelect = document.getElementById("payment-source-select");
+    paymentMethods.forEach((paymentMethod) => {
+        var option = document.createElement("option");
+        option.value = paymentMethod.tokenId;
+        option.innerText = paymentMethod.cardBrand + " ***" + paymentMethod.lastFourDigits;
+        paymentSourceSelect.appendChild(option);
+    });
+}
  
  // Handle form submission.
  document.addEventListener("DOMContentLoaded", function(event) {
-    var currentUserId = getCurrentUserId();
-    document.getElementById("thetoken").innerText = "user:" + currentUserId;
+    loadUrlParams();
+    var paymentMethods = getPaymentMethods();
+    if (paymentMethods && paymentMethods.length > 0) {
+        populatePaymentMethods(paymentMethods);
+    }
+
+    $("select").material_select();
+
+    $("#payment-source-select").change(function() {
+        if ($(this).val() === "newCard") {
+            isAddingNewCard = true;
+            document.getElementById("payment-form").style.display = "block";
+        }
+        else {
+            document.getElementById("payment-form").style.display = "none";
+        }
+        document.getElementById("payment-input-container").style.display = "block";
+    });
 
     // Create a Stripe client.
     var stripe = Stripe('pk_test_8qrPJob9OiAa3zsnV5wN9raM');

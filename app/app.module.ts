@@ -8,6 +8,7 @@ import { LeaderboardService } from "~/leaderboard/leaderboard.service";
 import { DonateService } from "~/donate/donate.service";
 import { HttpClientModule } from "@angular/common/http";
 import { NavigationData } from "~/models/navigation.data";
+import { UserService } from "~/shared/user.service";
 
 @NgModule({
     bootstrap: [
@@ -22,6 +23,7 @@ import { NavigationData } from "~/models/navigation.data";
     providers: [
         LeaderboardService,
         DonateService,
+        UserService,
         NavigationData
     ],
     declarations: [

@@ -7,12 +7,13 @@
       <Label class="h2 title" [text]="charity.name"></Label>
       <Image id="charity-detail-image" [src]="charity.imageSource"></Image>
       <!-- <StackLayout style="width: 90%"> -->
-          <WebView src="~/html/stripe-card-payment/stripe-card-payment.html?currentUserId=nickredmond236"></WebView>
           <Label id="charity-detail-description" [text]="charity.description" textWrap="true"></Label>
           <StackLayout id="charity-detail-buttons-container">
               <Button text="View Website" (tap)="onViewWebsiteTap()"></Button>
-              <Button text="Make One-time Donation"></Button>
-              <Button text="Set Up Recurring Donation"></Button>
+              <Button text="Make One-time Donation" (tap)="onOneTimeDonationTap()"></Button>
+              
+              <!-- todo: recurring setup modal/page -->
+              <Button text="Set Up Recurring Donation"></Button>  
           </StackLayout>
           <!-- <GridLayout id="charity-detail-counters-container" rows="*,*" columns="*,*">
               <Label class="charity-detail-counter-label" col="0" colSpan="1" row="0" rowSpan="1" text="Money raised via ambr:"></Label>
