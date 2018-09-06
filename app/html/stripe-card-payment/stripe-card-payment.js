@@ -7,6 +7,13 @@
 
 var URL_PARAMETERS = {};
 var isAddingNewCard = false;
+var stripe = null;
+var card = null;
+
+var hasDecimalPlace = function(value, x) {
+    var pointIndex = value.indexOf('.');
+    return  pointIndex >= 0 && pointIndex < value.length - x;
+};
 
 var loadUrlParams = function() {
     var currentUrl = window.location.href;
@@ -47,6 +54,15 @@ var populatePaymentMethods = function(paymentMethods) {
 
     $("select").material_select();
 
+    $('#payment-amount').keypress(function (e) {
+        var character = String.fromCharCode(e.keyCode)
+        var newValue = this.value + character;
+        if (isNaN(newValue) || hasDecimalPlace(newValue, 3)) {
+            e.preventDefault();
+            return false;
+        }
+    });
+
     $("#payment-source-select").change(function() {
         if ($(this).val() === "newCard") {
             isAddingNewCard = true;
@@ -59,7 +75,7 @@ var populatePaymentMethods = function(paymentMethods) {
     });
 
     // Create a Stripe client.
-    var stripe = Stripe('pk_test_8qrPJob9OiAa3zsnV5wN9raM');
+    stripe = Stripe('pk_test_8qrPJob9OiAa3zsnV5wN9raM');
 
     // Create an instance of Elements.
     var elements = stripe.elements();
@@ -84,7 +100,7 @@ var populatePaymentMethods = function(paymentMethods) {
     };
 
     // Create an instance of the card Element.
-    var card = elements.create('card', {style: style});
+    card = elements.create('card', {style: style});
 
     // Add an instance of the card Element into the `card-element` <div>.
     card.mount('#card-element');
@@ -98,20 +114,27 @@ var populatePaymentMethods = function(paymentMethods) {
         displayError.textContent = '';
     }
     });
+});
 
-    var form = document.getElementById('payment-form');
-    form.addEventListener('submit', function(event) {
-        event.preventDefault();
+var submitPayment = function() {
 
+}
+
+var onDonateClick =  function() {
+    if (isAddingNewCard) {
         stripe.createToken(card).then(function(result) {
             if (result.error) {
-            // Inform the user if there was an error.
-            var errorElement = document.getElementById('card-errors');
-            errorElement.textContent = result.error.message;
+                // Inform the user if there was an error.
+                var errorElement = document.getElementById('card-errors');
+                errorElement.textContent = result.error.message;
             } else {
                 // Send the token to your server.
                 document.getElementById("thetoken").innerText = JSON.stringify(result.token);
+                // todo: submitPayment()
             }
         });
-    });
-});
+    }
+    else {
+
+    }
+};
