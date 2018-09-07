@@ -1,0 +1,21 @@
+<TabView [selectedIndex]="0" androidTabsPosition="bottom">
+
+  <StackLayout
+      *tabItem="{title: 'Leaderboard', iconSource: getIconSource('trophy')}"
+      name="leaderboardTab">
+      <Leaderboard></Leaderboard>
+  </StackLayout>
+
+  <StackLayout
+      *tabItem="{title: 'Donate', iconSource: getIconSource('money')}"
+      name="donateTab">
+      <Donate></Donate>
+  </StackLayout>
+
+  <StackLayout
+      *tabItem="{title: 'Search', iconSource: getIconSource('search')}"
+      name="searchTab">
+      <Search></Search>
+  </StackLayout>
+
+</TabView>

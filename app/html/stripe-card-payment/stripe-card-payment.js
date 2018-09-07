@@ -26,8 +26,8 @@ var loadUrlParams = function() {
     })
 };
 
-var getCurrentUserId = function() {
-    return URL_PARAMETERS["currentUserId"];
+var getCurrentUserToken = function() {
+    return URL_PARAMETERS["currentUserToken"];
 };
 var getPaymentMethods = function() {
     var paymentMethodsString = decodeURI(URL_PARAMETERS["paymentMethods"]);

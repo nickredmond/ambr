@@ -6,9 +6,13 @@ import { HttpClient } from "@angular/common/http";
 @Injectable()
 export class UserService {
     private paymentMethods: PaymentMethod[];
-    public currentUserId: string; // todo: implement this, possibly via login
+    public currentUserToken: string; // todo: implement this, possibly via login
 
     constructor(private httpClient: HttpClient) {}
+
+    public isUserLoggedIn(): boolean {
+        return this.currentUserToken && this.currentUserToken.length > 0;
+    }
 
     public getSavedPaymentMethods(): Observable<PaymentMethod[]> {
         return this.paymentMethods ? of(this.paymentMethods) : this.loadSavedPaymentMethods();

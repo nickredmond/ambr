@@ -23,9 +23,9 @@ export class PaymentComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     this.userService.getSavedPaymentMethods().subscribe((paymentMethods) => {
-      const currentUserId = this.userService.currentUserId;
+      const currentUserToken = this.userService.currentUserToken;
       const stringifiedPayload = JSON.stringify(paymentMethods);
-      const paymentScreenUrl = "~/html/stripe-card-payment/stripe-card-payment.html?currentUserId=" + currentUserId + "&paymentMethods=" + stringifiedPayload;
+      const paymentScreenUrl = "~/html/stripe-card-payment/stripe-card-payment.html?currentUserToken=" + currentUserToken + "&paymentMethods=" + stringifiedPayload;
 
       this.isPaymentInfoLoaded = true;
       const paymentScreenElement: WebView = this.paymentScreen.nativeElement;

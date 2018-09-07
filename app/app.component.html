@@ -1,18 +1,1 @@
-<TabView *ngIf="!isDetailViewDisplayed" androidTabsPosition="bottom">
-
-    <page-router-outlet
-        *tabItem="{title: 'Leaderboard', iconSource: getIconSource('trophy')}"
-        name="leaderboardTab">
-    </page-router-outlet>
-
-    <page-router-outlet
-        *tabItem="{title: 'Donate', iconSource: getIconSource('money')}"
-        name="donateTab">
-    </page-router-outlet>
-
-    <page-router-outlet
-        *tabItem="{title: 'Search', iconSource: getIconSource('search')}"
-        name="searchTab">
-    </page-router-outlet>
-
-</TabView>
+<page-router-outlet></page-router-outlet>

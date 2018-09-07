@@ -7,19 +7,31 @@ import { LeaderboardComponent } from "./leaderboard/leaderboard.component";
 import { SearchComponent } from "./search/search.component";
 import { CharityComponent } from "~/charity/charity.component";
 import { PaymentComponent } from "~/payment/payment.component";
+import { LoginComponent } from "~/login/login.component";
+import { AppComponent } from "~/app.component";
+import { HomeComponent } from "~/home/home.component";
 
-export const COMPONENTS = [DonateComponent, LeaderboardComponent, SearchComponent, CharityComponent, PaymentComponent];
+export const COMPONENTS = [DonateComponent, LeaderboardComponent, SearchComponent, CharityComponent, PaymentComponent, LoginComponent, HomeComponent];
 
 const routes: Routes = [
-    { path: "", redirectTo: "/(leaderboardTab:leaderboard//donateTab:donate//searchTab:search)", pathMatch: "full" },
+    { path: "", redirectTo: "app", pathMatch: "full" },
+    { path: "app", component: AppComponent },
+    { path: "login", component: LoginComponent },
+    // /(leaderboardTab:leaderboard//donateTab:donate//searchTab:search)
+    { path: "home", component: HomeComponent },
+    // , children: [
+    //     { path: "leaderboard", component: LeaderboardComponent, outlet: "leaderboardTab" },
+    //     { path: "donate", component: DonateComponent, outlet: "donateTab" },
+    //     { path: "search", component: SearchComponent, outlet: "searchTab" }
+    // ] },
 
-    { path: "leaderboard", component: LeaderboardComponent, outlet: "leaderboardTab" },
+    // { path: "leaderboard", component: LeaderboardComponent, outlet: "leaderboardTab" },
 
-    { path: "donate", component: DonateComponent, outlet: "donateTab" },
-    { path: "payment", component: PaymentComponent, outlet: "donateTab" },
-    { path: "charity", component: CharityComponent, outlet: "donateTab" },
+    // { path: "donate", component: DonateComponent, outlet: "donateTab" },
+    { path: "payment", component: PaymentComponent },
+    { path: "charity", component: CharityComponent },
     
-    { path: "search", component: SearchComponent, outlet: "searchTab" },
+    // { path: "search", component: SearchComponent, outlet: "searchTab" },
 ];
 
 @NgModule({

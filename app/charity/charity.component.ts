@@ -40,6 +40,6 @@ export class CharityComponent implements OnInit {
   }
 
   public onOneTimeDonationTap(): void {
-    this.router.navigate(["../payment"], { relativeTo: this.route });
+    this.router.navigate(["payment"]);
   }
 }

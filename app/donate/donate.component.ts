@@ -35,7 +35,7 @@ export class DonateComponent implements OnInit {
 
     public onCharityTap(charity: Charity): void {
         this.navigationData.selectedCharity = charity;
-        this.router.navigate(["../charity"], { relativeTo: this.route });
+        this.router.navigate(["charity"]);//, { relativeTo: this.route });
     }
 
     public onQueryCharities($event): void {
