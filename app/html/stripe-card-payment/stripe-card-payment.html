@@ -32,6 +32,7 @@
             <div class="input-field col s12">
                 &dollar;<input id="payment-amount" type="number" placeholder="Enter donation amount" />
             </div>
+            <span id="missingDonationAmountLabel">Donation amount is required.</span>
         </div>
         <div id="donate-button-container" class="row">
             <div class="col s12 waves-light btn" onclick="onDonateClick()">Donate</div>
@@ -88,6 +89,12 @@
 
     #donate-button-container {
         margin: 1em;
+    }
+
+    #missingDonationAmountLabel {
+        margin-left: 1em;
+        color: red;
+        display: none;
     }
 </style>
 

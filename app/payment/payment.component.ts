@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { RouterExtensions } from 'nativescript-angular/router';
 import { UserService } from '~/shared/user.service';
+import { WebView } from "ui/web-view";
 
 import * as dialogs from 'ui/dialogs';
+const webViewInterfaceModule = require('nativescript-webview-interface');
 
 @Component({
   moduleId: module.id,
@@ -10,18 +12,24 @@ import * as dialogs from 'ui/dialogs';
   templateUrl: './payment.component.html',
   styleUrls: ['./payment.component.scss']
 })
-export class PaymentComponent implements OnInit {
-  public paymentScreenUrl: string;
+export class PaymentComponent implements AfterViewInit {
+  @ViewChild("paymentScreen") paymentScreen: ElementRef;
+
   public isPaymentInfoLoaded = false;
+
+  private _paymentScreenWebViewInterface;//
 
   constructor(private userService: UserService, private router: RouterExtensions) { }
 
-  ngOnInit() {
+  ngAfterViewInit() {
     this.userService.getSavedPaymentMethods().subscribe((paymentMethods) => {
       const currentUserId = this.userService.currentUserId;
       const stringifiedPayload = JSON.stringify(paymentMethods);
-      this.paymentScreenUrl = "~/html/stripe-card-payment/stripe-card-payment.html?currentUserId=" + currentUserId + "&paymentMethods=" + stringifiedPayload;
+      const paymentScreenUrl = "~/html/stripe-card-payment/stripe-card-payment.html?currentUserId=" + currentUserId + "&paymentMethods=" + stringifiedPayload;
+
       this.isPaymentInfoLoaded = true;
+      const paymentScreenElement: WebView = this.paymentScreen.nativeElement;
+      this._paymentScreenWebViewInterface = new webViewInterfaceModule.WebViewInterface(paymentScreenElement, paymentScreenUrl);
     });
   }
 

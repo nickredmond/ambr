@@ -11,7 +11,7 @@ import { PaymentComponent } from "~/payment/payment.component";
 export const COMPONENTS = [DonateComponent, LeaderboardComponent, SearchComponent, CharityComponent, PaymentComponent];
 
 const routes: Routes = [
-    { path: "", redirectTo: "/(leaderboardTab:leaderboard//donateTab:payment//searchTab:search)", pathMatch: "full" },
+    { path: "", redirectTo: "/(leaderboardTab:leaderboard//donateTab:donate//searchTab:search)", pathMatch: "full" },
 
     { path: "leaderboard", component: LeaderboardComponent, outlet: "leaderboardTab" },
 

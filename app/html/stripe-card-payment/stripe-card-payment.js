@@ -116,10 +116,23 @@ var populatePaymentMethods = function(paymentMethods) {
     });
 });
 
-var submitPayment = function() {
-
+var trySubmitPayment = function() {
+    var paymentAmountInput = document.getElementById("payment-amount");
+    var donationErrorLabel = document.getElementById("missingDonationAmountLabel");
+    var donationAmount = paymentAmountInput.value;
+    if (!donationAmount) {
+        paymentAmountInput.classList.add("invalid");
+        paymentAmountInput.setAttribute("aria-invalid", "true");
+        donationErrorLabel.style.display = "block";
+    }
+    else {
+        paymentAmountInput.classList.remove("invalid");
+        paymentAmountInput.removeAttribute("aria-invalid");
+        donationErrorLabel.style.display = "none";
+    }
 }
 
+// todo: before doing ANYTHING, validate form i.e. validate donate amount exists
 var onDonateClick =  function() {
     if (isAddingNewCard) {
         stripe.createToken(card).then(function(result) {
@@ -130,11 +143,11 @@ var onDonateClick =  function() {
             } else {
                 // Send the token to your server.
                 document.getElementById("thetoken").innerText = JSON.stringify(result.token);
-                // todo: submitPayment()
+                trySubmitPayment();
             }
         });
     }
     else {
-
+        trySubmitPayment();
     }
 };
